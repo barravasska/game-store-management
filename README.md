@@ -9,12 +9,12 @@
 <h1 align="center">🎮 GameMarket</h1>
 
 <p align="center">
-  <strong>Marketplace Jual Beli Akun Game Terpercaya</strong>
+  <strong>Marketplace Jual Beli Akun Game Terpercaya dengan Sistem Transaksi Terintegrasi</strong>
 </p>
 
 <p align="center">
   Platform jual beli akun <b>Valorant</b>, <b>Mobile Legends</b>, dan <b>PUBG Mobile</b> yang aman.<br/>
-  Transaksi cepat, garansi anti hack-back.
+  Dilengkapi dengan Dashboard Analitik, Sistem Keranjang, dan Transaksi Otomatis.
 </p>
 
 <p align="center">
@@ -30,43 +30,34 @@
 
 ## ✨ Fitur Utama
 
-### 🏪 Marketplace Publik
-- **Hero section** dengan gradient interaktif dan CTA ganda (Jelajahi / Mulai Jualan)
-- **Pencarian & filter dinamis** — cari berdasarkan judul, filter per game, rentang harga min/max
-- **Kartu akun** dengan preview gambar, tier/rank badge, harga dalam Rupiah, dan info penjual
-- **Halaman detail akun** lengkap dengan breadcrumb, gambar besar, profil penjual, deskripsi, dan tombol hubungi via WhatsApp
-- **Skeleton loading state** untuk pengalaman pengguna yang mulus saat data sedang dimuat
-- **Navigasi per game** — halaman khusus Valorant, MLBB, dan PUBG Mobile
+### 🏪 Marketplace & Transaksi (NEW!)
+- **Sistem Keranjang (Cart)** — Simpan beberapa akun sekaligus sebelum melakukan pembayaran.
+- **Checkout Flow** — Proses pembayaran simulasi dengan pemilihan metode pembayaran (Bank Transfer, QRIS).
+- **Riwayat Pembelian** — Dashboard khusus untuk memantau akun-akun yang telah Anda beli.
+- **Auto-Sold Status** — Akun otomatis berubah status menjadi `sold` dan hilang dari katalog setelah checkout sukses.
 
-### 🔐 Autentikasi & Otorisasi
-- **Register** dengan email & password (verifikasi email via Supabase)
-- **Login** dengan email & password (Supabase Auth)
-- **Logout** secara real-time dari client-side
-- **Middleware** untuk menjaga session tetap segar (auto-refresh token)
-- **Role-Based Access Control (RBAC)** — role `user` dan `admin` dari tabel `profiles`
+### 📈 Dashboard Analytics (NEW!)
+- **Visualisasi Data** — Grafik pendapatan bulanan menggunakan **Recharts**.
+- **Metrik Bisnis** — Total revenue, jumlah produk terjual, dan total listing aktif.
+- **Top Performing Products** — Daftar produk termahal yang berhasil terjual.
 
-### 📊 Dashboard Penjual
-- **Kelola dagangan** — lihat semua akun yang dijual dalam tabel responsif (produk, game, harga, status)
-- **Hapus listing** sendiri dengan security check ganda (client + RLS)
-- **Jual akun baru** — form lengkap: judul, pilih game, tier/rank, harga, deskripsi, upload screenshot
-- **Upload gambar** ke Supabase Storage (`account_images` bucket) dengan nama file unik
-- **Pengaturan profil** — ubah username publik & upload foto avatar (`avatars` bucket)
-- **Sidebar navigasi** dengan tips penjualan
+### 📊 Dashboard Penjual & Pembeli
+- **Kelola Dagangan** — Tabel responsif untuk memantau status jualan (Available / Sold).
+- **Mark as Sold Manual** — Penjual bisa menandai produk terjual secara manual.
+- **Jual Akun Baru** — Form lengkap dengan upload gambar ke Supabase Storage.
+- **Pengaturan Profil** — Ubah username dan upload avatar secara instan.
 
 ### 🛡️ Admin Panel
-- **Proteksi layout** — hanya user dengan `role: admin` yang bisa akses `/admin`
-- **Monitoring postingan** — lihat semua listing dari semua penjual
-- **Hapus paksa** — admin bisa menghapus listing yang melanggar
-- **Force-dynamic rendering** untuk data selalu fresh
-- **Sidebar admin** terpisah dengan navigasi ke halaman pengguna
+- **Monitoring Seluruh Sistem** — Admin dapat memantau semua postingan dari seluruh penjual.
+- **Tindakan Moderasi** — Hapus paksa postingan yang melanggar atau ubah status produk secara manual.
+- **RBAC (Role-Based Access Control)** — Proteksi ketat halaman admin di level server.
 
-### 🎨 UI / UX
-- **Dark mode** premium dengan palet slate
-- **Glassmorphism** navbar (`backdrop-blur-md`)
-- **Animasi halus** menggunakan Framer Motion (hover lift pada kartu, navbar slide-in)
-- **Responsive design** — mobile-first, sidebar berubah jadi horizontal scroll di mobile
-- **Tipografi Inter** dari Google Fonts
-- **Format Rupiah (IDR)** otomatis di seluruh aplikasi
+### 🎨 UI / UX Premium (Production Ready)
+- **Dark Mode Aesthetic** — Menggunakan palet slate yang elegan dengan sentuhan glassmorphism.
+- **Loading Skeletons** — Animasi pulse saat data sedang dimuat (Halaman Utama & Dashboard).
+- **Global Error Handling** — Layar error kustom yang cantik jika terjadi kegagalan sistem.
+- **Empty State UI** — Ilustrasi menarik saat keranjang atau daftar jualan sedang kosong.
+- **SweetAlert2** — Notifikasi interaktif yang responsif untuk setiap tindakan user.
 
 ---
 
@@ -75,155 +66,63 @@
 | Layer | Teknologi | Keterangan |
 |-------|-----------|------------|
 | **Framework** | [Next.js 16](https://nextjs.org) | App Router, Server Components, Server Actions |
-| **UI Library** | [React 19](https://react.dev) | `useActionState` untuk form handling |
-| **Styling** | [Tailwind CSS 4](https://tailwindcss.com) | `@import "tailwindcss"` syntax |
-| **Animasi** | [Framer Motion](https://motion.dev) | Hover effects, entrance animations |
-| **Backend / BaaS** | [Supabase](https://supabase.com) | Auth, PostgreSQL, Storage, Row-Level Security |
-| **Auth** | Supabase Auth + `@supabase/ssr` | Cookie-based, SSR-compatible |
-| **Bahasa** | [TypeScript 5](https://typescriptlang.org) | Strict typing |
-| **Linting** | [ESLint 9](https://eslint.org) + `eslint-config-next` | Code quality |
-
----
-
-## 🏗 Arsitektur
-
-```
-┌────────────────────────────────────────────────────────┐
-│                     BROWSER (Client)                   │
-│  ┌──────────┐  ┌────────────┐  ┌────────────────────┐  │
-│  │  Navbar   │  │ AccountCard│  │ SellForm/Settings  │  │
-│  │ (motion)  │  │  (motion)  │  │  (useActionState)  │  │
-│  └──────────┘  └────────────┘  └────────────────────┘  │
-└───────────────────────┬────────────────────────────────┘
-                        │ Server Actions + SSR
-┌───────────────────────▼────────────────────────────────┐
-│                   NEXT.JS SERVER                        │
-│  ┌────────────────────────────────────────────────────┐ │
-│  │ middleware.ts — Refresh session di setiap request  │ │
-│  ├────────────────────────────────────────────────────┤ │
-│  │ Server Components (page.tsx)                       │ │
-│  │  • Data fetching langsung via Supabase client      │ │
-│  │  • Dynamic filtering (searchParams)                │ │
-│  ├────────────────────────────────────────────────────┤ │
-│  │ Server Actions (actions/*.ts)                      │ │
-│  │  • createAccount — insert + upload image           │ │
-│  │  • deleteAccount — delete + ownership check        │ │
-│  │  • login / signup — Supabase Auth                  │ │
-│  │  • updateProfile — update username + avatar        │ │
-│  └────────────────────────────────────────────────────┘ │
-└───────────────────────┬────────────────────────────────┘
-                        │ Supabase Client (SSR)
-┌───────────────────────▼────────────────────────────────┐
-│                    SUPABASE (Cloud)                      │
-│  ┌──────────┐  ┌───────────┐  ┌──────────────────────┐ │
-│  │   Auth    │  │ PostgreSQL│  │      Storage         │ │
-│  │ (email +  │  │ • accounts│  │ • account_images     │ │
-│  │ password) │  │ • profiles│  │ • avatars            │ │
-│  │           │  │ • games   │  │                      │ │
-│  └──────────┘  └───────────┘  └──────────────────────┘ │
-│                      RLS (Row-Level Security)           │
-└─────────────────────────────────────────────────────────┘
-```
+| **UI Library** | [React 19](https://react.dev) | `useActionState` & dynamic imports |
+| **Styling** | [Tailwind CSS 4](https://tailwindcss.com) | Modern CSS utility-first framework |
+| **Analytics** | [Recharts](https://recharts.org) | SVG-based charting library |
+| **Notifications** | [SweetAlert2](https://sweetalert2.github.io) | Beautiful, responsive, customizable popups |
+| **Backend / BaaS** | [Supabase](https://supabase.com) | PostgreSQL, Auth, Storage, RLS |
+| **Auth** | Supabase Auth | Cookie-based session management |
+| **Bahasa** | [TypeScript 5](https://typescriptlang.org) | Type safety everywhere |
 
 ---
 
 ## 🚀 Getting Started
 
-### Prasyarat
-
-- **Node.js** ≥ 18
-- **npm**, **yarn**, **pnpm**, atau **bun**
-- Akun [Supabase](https://supabase.com) (gratis)
-
-### 1. Clone Repository
-
+### 1. Clone & Install
 ```bash
 git clone https://github.com/username/game-store-management.git
 cd game-store-management
-```
-
-### 2. Install Dependencies
-
-```bash
 npm install
 ```
 
-### 3. Setup Environment Variables
-
-Buat file `.env.local` di root project:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-```
-
-> 💡 Dapatkan kedua value ini dari **Supabase Dashboard** → **Settings** → **API**
-
-### 4. Setup Database Supabase
-
-Buat tabel-tabel berikut di Supabase SQL Editor:
+### 2. Setup Database (Supabase)
+Jalankan script SQL berikut di SQL Editor Supabase:
 
 <details>
-<summary>📄 <strong>Klik untuk melihat SQL Schema</strong></summary>
+<summary>📄 <strong>Klik untuk melihat SQL Schema Lengkap</strong></summary>
 
 ```sql
--- Tabel games (daftar game yang didukung)
-CREATE TABLE games (
+-- 1. Tabel Utama (Profiles, Games, Accounts)
+-- [Lihat di file schema asli...]
+
+-- 2. Tabel Transaksi
+CREATE TABLE transactions (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  name TEXT NOT NULL,
-  slug TEXT UNIQUE NOT NULL,
+  buyer_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
+  total_amount INTEGER NOT NULL,
+  status TEXT DEFAULT 'pending',
+  payment_method TEXT DEFAULT 'transfer_bank',
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- Seed data game
-INSERT INTO games (name, slug) VALUES
-  ('Valorant', 'valorant'),
-  ('Mobile Legends: Bang Bang', 'mlbb'),
-  ('PUBG Mobile', 'pubgm');
-
--- Tabel profiles (profil pengguna)
-CREATE TABLE profiles (
-  id UUID REFERENCES auth.users ON DELETE CASCADE PRIMARY KEY,
-  username TEXT UNIQUE,
-  email TEXT,
-  avatar_url TEXT,
-  role TEXT DEFAULT 'user',
-  updated_at TIMESTAMPTZ DEFAULT now()
-);
-
--- Tabel accounts (listing akun game yang dijual)
-CREATE TABLE accounts (
+CREATE TABLE transaction_items (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  title TEXT NOT NULL,
-  description TEXT,
+  transaction_id UUID REFERENCES transactions(id) ON DELETE CASCADE NOT NULL,
+  account_id UUID REFERENCES accounts(id) ON DELETE SET NULL,
   price INTEGER NOT NULL,
-  tier TEXT NOT NULL,
-  status TEXT DEFAULT 'available',
-  image_url TEXT,
-  seller_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
-  game_id UUID REFERENCES games(id) ON DELETE CASCADE NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now()
 );
-```
 
+-- 3. Tabel Keranjang
+CREATE TABLE cart_items (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
+  account_id UUID REFERENCES accounts(id) ON DELETE CASCADE NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  UNIQUE(user_id, account_id)
+);
+```
 </details>
-
-### 5. Setup Supabase Storage
-
-Buat 2 bucket di **Supabase Dashboard** → **Storage**:
-
-| Bucket | Public | Keterangan |
-|--------|--------|------------|
-| `account_images` | ✅ Yes | Screenshot/bukti akun game |
-| `avatars` | ✅ Yes | Foto profil pengguna |
-
-### 6. Jalankan Development Server
-
-```bash
-npm run dev
-```
-
-Buka [http://localhost:3000](http://localhost:3000) di browser.
 
 ---
 
@@ -231,144 +130,54 @@ Buka [http://localhost:3000](http://localhost:3000) di browser.
 
 ```mermaid
 erDiagram
-    AUTH_USERS ||--|| PROFILES : "1:1"
-    PROFILES ||--o{ ACCOUNTS : "1:N"
-    GAMES ||--o{ ACCOUNTS : "1:N"
+    PROFILES ||--o{ ACCOUNTS : "sells"
+    PROFILES ||--o{ TRANSACTIONS : "buys"
+    PROFILES ||--o{ CART_ITEMS : "has"
+    GAMES ||--o{ ACCOUNTS : "categorizes"
+    ACCOUNTS ||--o{ CART_ITEMS : "in"
+    TRANSACTIONS ||--o{ TRANSACTION_ITEMS : "contains"
+    ACCOUNTS ||--o{ TRANSACTION_ITEMS : "sold_as"
 
     PROFILES {
         uuid id PK
-        text username UK
-        text email
-        text avatar_url
+        text username
         text role "user | admin"
-        timestamptz updated_at
     }
-
-    GAMES {
-        uuid id PK
-        text name
-        text slug UK
-        timestamptz created_at
-    }
-
     ACCOUNTS {
         uuid id PK
         text title
-        text description
-        int price
-        text tier
         text status "available | sold"
-        text image_url
-        uuid seller_id FK
-        uuid game_id FK
-        timestamptz created_at
+        int price
+    }
+    TRANSACTIONS {
+        uuid id PK
+        uuid buyer_id FK
+        int total_amount
     }
 ```
 
 ---
 
-## 📁 Struktur Folder
+## 📁 Struktur Folder Utama
 
 ```
 game-store-management/
-├── app/                          # Next.js App Router
-│   ├── layout.tsx                # Root layout (Navbar, auth check, role)
-│   ├── page.tsx                  # Homepage (hero + marketplace + filter)
-│   ├── loading.tsx               # Global skeleton loading UI
-│   ├── template.tsx              # Template wrapper
-│   ├── globals.css               # Tailwind CSS + custom properties
-│   │
-│   ├── auth/                     # Halaman autentikasi
-│   │   ├── login/page.tsx        # Form login
-│   │   ├── register/page.tsx     # Form registrasi
-│   │   └── games/[slug]/         # Halaman per game
-│   │
-│   ├── accounts/                 # Detail akun
-│   │   └── [id]/page.tsx         # Halaman detail + WA contact
-│   │
-│   ├── sell/                     # Jual akun
-│   │   └── page.tsx              # Form posting akun baru
-│   │
-│   ├── dashboard/                # Area penjual
-│   │   ├── layout.tsx            # Sidebar navigasi penjual
-│   │   ├── page.tsx              # Tabel kelola dagangan
-│   │   └── settings/page.tsx     # Form pengaturan profil
-│   │
-│   └── admin/                    # Area admin
-│       ├── layout.tsx            # Sidebar admin + role guard
-│       └── page.tsx              # Monitoring semua postingan
-│
-├── actions/                      # Server Actions (React 19)
-│   ├── accounts.ts               # createAccount, deleteAccount
-│   ├── auth.ts                   # login, signup
-│   └── profiles.ts               # updateProfile
-│
-├── components/
-│   ├── shared/                   # Komponen bersama
-│   │   ├── Navbar.tsx            # Navigasi global + role-aware
-│   │   ├── AccountCard.tsx       # Kartu produk dengan animasi
-│   │   ├── SearchFilter.tsx      # Form pencarian & filter
-│   │   ├── SellForm.tsx          # Form jual akun
-│   │   └── SettingsForm.tsx      # Form pengaturan profil
-│   └── ui/                       # Komponen UI primitif
-│       └── SubmitButton.tsx      # Tombol submit dengan loading state
-│
-├── lib/
-│   ├── supabase/
-│   │   ├── server.ts             # Supabase client (server-side, cookies)
-│   │   └── client.ts             # Supabase client (browser-side)
-│   └── utils.ts                  # Utility functions
-│
-├── types/
-│   └── supabase.ts               # Supabase type definitions
-│
-├── middleware.ts                  # Session refresh middleware
-├── next.config.ts                # Next.js config (image domains)
-├── package.json                  # Dependencies & scripts
-├── tsconfig.json                 # TypeScript configuration
-└── tailwind.config.ts            # Tailwind configuration
+├── actions/              # Server Actions (auth, accounts, cart, checkout)
+├── app/                  # App Router Routes
+│   ├── (marketplace)/    # Public pages, cart, checkout
+│   ├── dashboard/        # Seller area (analytics, manage, purchases)
+│   ├── admin/            # Admin monitoring area
+│   ├── loading.tsx       # Root skeleton
+│   └── error.tsx         # Global error boundary
+├── components/           # UI & Shared Components
+│   ├── shared/           # AnalyticsChart, AddToCart, EmptyState, Navbar
+│   └── ui/               # SubmitButton, Base components
+├── lib/                  # Supabase config & Utilities
+└── types/                # Database types
 ```
-
----
-
-## 📜 Scripts
-
-| Command | Keterangan |
-|---------|------------|
-| `npm run dev` | Jalankan development server |
-| `npm run build` | Build untuk production |
-| `npm run start` | Jalankan production server |
-| `npm run lint` | Jalankan ESLint |
-
----
-
-## 🔒 Keamanan
-
-- **Row-Level Security (RLS)** di Supabase memastikan user hanya bisa memodifikasi data miliknya sendiri
-- **Double security check** pada penghapusan akun (client-side check + RLS policy)
-- **Middleware session refresh** — setiap request secara otomatis memperbarui token autentikasi
-- **Server-side auth guard** — halaman `/sell`, `/dashboard`, dan `/admin` diproteksi di server level
-- **RBAC (Role-Based Access Control)** — admin panel hanya bisa diakses oleh user dengan `role: admin`
-- **Environment variables** — credentials Supabase disimpan di `.env.local` (tidak di-commit ke Git)
-
----
-
-## 🤝 Kontribusi
-
-1. Fork repository ini
-2. Buat branch baru (`git checkout -b fitur/fitur-baru`)
-3. Commit perubahan (`git commit -m 'feat: menambahkan fitur baru'`)
-4. Push ke branch (`git push origin fitur/fitur-baru`)
-5. Buat Pull Request
-
----
-
-## 📝 Lisensi
-
-Proyek ini bersifat pribadi dan tidak memiliki lisensi publik.
 
 ---
 
 <p align="center">
-  Dibuat dengan ❤️ menggunakan <strong>Next.js</strong> + <strong>Supabase</strong>
+  Dibuat dengan ❤️ oleh <strong>Antigravity AI</strong> untuk <strong>Barra</strong>
 </p>
