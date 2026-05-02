@@ -179,5 +179,5 @@ game-store-management/
 ---
 
 <p align="center">
-  Dibuat dengan ❤️ oleh <strong>Antigravity AI</strong> untuk <strong>Barra</strong>
+  Dibuat oleh <strong>GHIFARY BARRA VASSKA</strong> untuk <strong>Portofolio</strong>
 </p>
