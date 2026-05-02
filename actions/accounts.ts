@@ -87,3 +87,57 @@ export async function deleteAccount(accountId: string) {
     revalidatePath('/dashboard')
     revalidatePath('/')
 }
+
+export async function markAsSold(accountId: string) {
+    const supabase = await createClient()
+
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error("Unauthorized")
+
+    // Update status menjadi 'sold'
+    const { error } = await supabase
+        .from('accounts')
+        .update({ status: 'sold' })
+        .eq('id', accountId)
+        .eq('seller_id', user.id)
+
+    if (error) {
+        return { error: "Gagal mengupdate status akun" }
+    }
+
+    revalidatePath('/dashboard')
+    revalidatePath('/dashboard/analytics')
+    revalidatePath('/')
+}
+
+export async function toggleAccountStatus(accountId: string, currentStatus: string) {
+    const supabase = await createClient()
+
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error("Unauthorized")
+
+    // Cek apakah user adalah admin
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+    if (profile?.role !== 'admin') {
+        throw new Error("Hanya admin yang dapat mengubah status")
+    }
+
+    const newStatus = currentStatus === 'available' ? 'sold' : 'available'
+
+    const { error } = await supabase
+        .from('accounts')
+        .update({ status: newStatus })
+        .eq('id', accountId)
+
+    if (error) {
+        return { error: "Gagal mengubah status" }
+    }
+
+    revalidatePath('/admin')
+    revalidatePath('/')
+}

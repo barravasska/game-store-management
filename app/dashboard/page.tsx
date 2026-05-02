@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { deleteAccount } from '@/actions/accounts'
 import Link from 'next/link'
 import Image from 'next/image'
+import EmptyState from '@/components/shared/EmptyState'
 
 export default async function DashboardPage() {
     const supabase = await createClient()
@@ -72,6 +73,17 @@ export default async function DashboardPage() {
                                         </td>
                                         <td className="p-4 text-right">
                                             <div className="flex justify-end gap-2">
+                                                {acc.status === 'available' && (
+                                                    <form action={async () => {
+                                                        "use server"
+                                                        const { markAsSold } = await import('@/actions/accounts')
+                                                        await markAsSold(acc.id)
+                                                    }}>
+                                                        <button className="p-2 text-emerald-400 hover:bg-emerald-400/10 rounded-lg transition-colors text-sm font-medium">
+                                                            Terjual
+                                                        </button>
+                                                    </form>
+                                                )}
                                                 <form action={async () => {
                                                     "use server"
                                                     await deleteAccount(acc.id)
@@ -86,8 +98,14 @@ export default async function DashboardPage() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={5} className="p-10 text-center text-slate-500 italic">
-                                        Belum ada akun yang kamu jual.
+                                    <td colSpan={5} className="p-8">
+                                        <EmptyState
+                                            icon="🏷️"
+                                            title="Belum ada dagangan"
+                                            description="Anda belum memiliki akun game yang dijual. Mulai posting akun game pertama Anda sekarang!"
+                                            actionLabel="Jual Akun Baru"
+                                            actionHref="/sell"
+                                        />
                                     </td>
                                 </tr>
                             )}

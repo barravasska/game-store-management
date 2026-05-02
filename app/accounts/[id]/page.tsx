@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import AddToCartButton from '@/components/shared/AddToCartButton'
 
 // Di Next.js 15, params harus di-await
 export default async function AccountDetailPage({
@@ -94,14 +95,13 @@ export default async function AccountDetailPage({
                             {formatRupiah(account.price)}
                         </p>
 
-                        {/* Link WhatsApp dengan pesan otomatis */}
-                        <Link
-                            href={`https://wa.me/6281234567890?text=${encodeURIComponent(`Halo, saya tertarik dengan akun ${account.title} (${account.games?.name}) seharga ${formatRupiah(account.price)}. Apakah masih tersedia?`)}`}
-                            target="_blank"
-                            className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-600/20 text-lg flex items-center justify-center gap-2"
-                        >
-                            <span>Hubungi Penjual via WA</span>
-                        </Link>
+                        {account.status === 'available' ? (
+                            <AddToCartButton accountId={account.id} />
+                        ) : (
+                            <div className="w-full py-4 bg-slate-800 text-slate-400 font-bold rounded-xl text-center border border-slate-700">
+                                Akun Sudah Terjual
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

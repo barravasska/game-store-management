@@ -69,15 +69,28 @@ export default async function AdminDashboardPage() {
                                             </span>
                                         </td>
                                         <td className="p-4 text-right">
-                                            {/* Tombol Hapus Khusus Admin */}
-                                            <form action={async () => {
-                                                "use server"
-                                                await deleteAccount(acc.id) // Action ini sudah kita buat sebelumnya
-                                            }}>
-                                                <button className="px-3 py-1.5 text-xs bg-rose-500/10 text-rose-500 border border-rose-500/20 hover:bg-rose-500 hover:text-white rounded-lg transition-all font-bold">
-                                                    Hapus Paksa
-                                                </button>
-                                            </form>
+                                            <div className="flex justify-end gap-2">
+                                                {/* Tombol Ubah Status Khusus Admin */}
+                                                <form action={async () => {
+                                                    "use server"
+                                                    const { toggleAccountStatus } = await import('@/actions/accounts')
+                                                    await toggleAccountStatus(acc.id, acc.status)
+                                                }}>
+                                                    <button className="px-3 py-1.5 text-xs bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 hover:text-white rounded-lg transition-all font-bold">
+                                                        Ubah ke {acc.status === 'available' ? 'Sold' : 'Available'}
+                                                    </button>
+                                                </form>
+
+                                                {/* Tombol Hapus Khusus Admin */}
+                                                <form action={async () => {
+                                                    "use server"
+                                                    await deleteAccount(acc.id) // Action ini sudah kita buat sebelumnya
+                                                }}>
+                                                    <button className="px-3 py-1.5 text-xs bg-rose-500/10 text-rose-500 border border-rose-500/20 hover:bg-rose-500 hover:text-white rounded-lg transition-all font-bold">
+                                                        Hapus Paksa
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))

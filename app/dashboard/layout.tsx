@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import DashboardNav from '@/components/shared/DashboardNav'
 
 export default function DashboardLayout({
     children,
@@ -14,28 +14,7 @@ export default function DashboardLayout({
                     Menu Penjual
                 </h2>
 
-                <nav className="flex md:flex-col gap-2 overflow-x-auto no-scrollbar pb-2 md:pb-0">
-                    <Link
-                        href="/dashboard"
-                        className="px-4 py-3 text-sm font-medium bg-blue-500/10 text-blue-400 rounded-xl border border-blue-500/20 hover:bg-blue-500/20 transition-all flex items-center gap-3 whitespace-nowrap"
-                    >
-                        <span>📊</span> Kelola Dagangan
-                    </Link>
-
-                    <Link
-                        href="/sell"
-                        className="px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all flex items-center gap-3 whitespace-nowrap"
-                    >
-                        <span>➕</span> Jual Akun Baru
-                    </Link>
-
-                    <Link
-                        href="/dashboard/settings"
-                        className="px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all flex items-center gap-3 whitespace-nowrap"
-                    >
-                        <span>⚙️</span> Pengaturan Profil
-                    </Link>
-                </nav>
+                <DashboardNav />
 
                 {/* Informasi Bantuan / Tips */}
                 <div className="hidden md:block mt-10 p-4 bg-slate-950 rounded-xl border border-slate-800">

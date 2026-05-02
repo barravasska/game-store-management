@@ -6,7 +6,7 @@ import { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
-export default function Navbar({ user, role }: { user: User | null; role: string | null }) {
+export default function Navbar({ user, role, cartCount = 0 }: { user: User | null; role: string | null; cartCount?: number }) {
     const supabase = createClient()
     const router = useRouter()
 
@@ -35,16 +35,26 @@ export default function Navbar({ user, role }: { user: User | null; role: string
                 <div className="flex gap-4 items-center">
                     {user ? (
                         <>
-                            <Link href="/sell" className="px-4 py-2 text-sm font-medium bg-emerald-600/10 text-emerald-400 border border-emerald-500/20 rounded-lg hover:bg-emerald-600/20 transition-all">
+                            {/* Icon Keranjang */}
+                            <Link href="/cart" className="relative p-2 text-slate-300 hover:text-white transition-colors">
+                                <span className="text-xl">🛒</span>
+                                {cartCount > 0 && (
+                                    <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full">
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </Link>
+
+                            <Link href="/sell" className="hidden sm:block px-4 py-2 text-sm font-medium bg-emerald-600/10 text-emerald-400 border border-emerald-500/20 rounded-lg hover:bg-emerald-600/20 transition-all">
                                 + Jual Akun
                             </Link>
-                            <Link href="/dashboard" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+                            <Link href="/dashboard" className="hidden sm:block text-sm font-medium text-slate-300 hover:text-white transition-colors">
                                 Dashboard
                             </Link>
                             {role === 'admin' && (
                                 <Link
                                     href="/admin"
-                                    className="px-4 py-2 text-sm font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-lg hover:bg-rose-500/20 transition-all flex items-center gap-1.5"
+                                    className="hidden sm:flex px-4 py-2 text-sm font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-lg hover:bg-rose-500/20 transition-all items-center gap-1.5"
                                 >
                                     🛡️ Admin
                                 </Link>
